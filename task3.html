@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 3: Ticket Form</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #734f96;
+      color: #1e293b;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      display: flex;
+      gap: 30px;
+    }
+    .form-section { flex: 1; }
+    .preview-section {
+      width: 280px;
+      border: 2px dashed #cbd5e1;
+      padding: 20px;
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h2 { margin-top: 0; color: #0f172a; font-size: 22px; }
+    .soldout-box {
+      background-color: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .soldout-box strong { color: #dc2626; }
+    form { display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 13px; font-weight: 500; color: #475569; }
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      outline: none;
+      background-color: #ffffff;
+      color: #1e293b;
+      font-family: inherit;
+    }
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23475569" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    input:focus, select:focus {
+      border-color: #734f96;
+      box-shadow: 0 0 0 3px rgba(115, 79, 150, 0.15);
+    }
+    .error-msg {
+      color: #dc2626;
+      font-size: 11px;
+      min-height: 14px;
+    }
+    button {
+      padding: 12px;
+      background: #734f96;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 5px;
+      transition: background 0.2s;
+    }
+    button:hover { background: #5e3f7d; }
+    input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #dc2626; }
+    #error-summary { font-size: 12px; font-weight: 600; margin-top: 8px; min-height: 18px; }
+    .preview-section h3 { margin-top: 0; font-size: 16px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; }
+    .preview-section p { margin: 8px 0; font-size: 13px; color: #334155; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="form-section">
+    <h2>Ticket Builder</h2>
+
+    <div class="soldout-box" id="soldout-notice">
+      <strong>Concert Sold-Out Notice:</strong> Dates from <strong>November 1 to November 4, 2026</strong> are fully booked for Concerts.
+    </div>
+
+    <form id="ticket-form" novalidate>
+      <label>Event:</label>
+      <select id="event-select" required>
+        <option value="" disabled selected>Select event</option>
+        <option value="Concert">Concert</option>
+        <option value="Football Match">Football Match</option>
+        <option value="Theatre">Theatre</option>
+      </select>
+      <span class="error-msg" id="event-error"></span>
+
+      <label>Date:</label>
+      <input type="date" id="ticket-date" required>
+      <span class="error-msg" id="date-error"></span>
+
+      <label>Ticket Type:</label>
+      <select id="ticket-type" required>
+        <option value="" disabled selected>Select type</option>
+        <option value="Standard">Standard (1000 tg)</option>
+        <option value="VIP">VIP (2500 tg)</option>
+      </select>
+      <span class="error-msg" id="type-error"></span>
+
+      <label>Quantity:</label>
+      <input type="number" id="ticket-quantity" value="1" min="1" required>
+      <span class="error-msg" id="qty-error"></span>
+
+      <label>Your Name:</label>
+      <input type="text" id="user-name" required>
+      <span class="error-msg" id="name-error"></span>
+
+      <label>Email Address:</label>
+      <input type="email" id="user-email" required>
+      <span class="error-msg" id="email-error"></span>
+
+      <label>Promo Code:</label>
+      <input type="text" id="promo-code" placeholder="e.g. SALE10">
+
+      <button type="submit">Book Ticket</button>
+    </form>
+    <p id="error-summary"></p>
+  </div>
+
+  <div class="preview-section">
+    <h3 id="preview-title">Ticket Preview</h3>
+    <p><strong>Event:</strong> <span id="preview-event">—</span></p>
+    <p><strong>Date:</strong> <span id="preview-date">—</span></p>
+    <p><strong>Type:</strong> <span id="preview-type">—</span></p>
+    <p><strong>Name:</strong> <span id="preview-name">—</span></p>
+    <p><strong>Email:</strong> <span id="preview-email">—</span></p>
+    <p><strong>Qty:</strong> <span id="preview-quantity">1</span></p>
+    <p><strong>Total:</strong> <span id="preview-total">0 tg</span></p>
+  </div>
+</div>
+
+<script src="task3.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 2: Kanban Board</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #734f96;
+      color: #1e293b;
+      margin: 0;
+      padding: 30px;
+    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    h2 { margin: 0; color: #ffffff; }
+    #total-counter { color: #e9d5ff; font-weight: 600; font-size: 15px; }
+
+    .progress-container {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .progress-bar-fill {
+      background: #22c55e;
+      height: 10px;
+      border-radius: 6px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .progress-text {
+      color: #ffffff;
+      font-size: 12px;
+      margin-top: 4px;
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .controls-box { display: flex; gap: 15px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; }
+    .controls-box input, .controls-box select {
+      padding: 10px 14px;
+      border: 1px solid #b18bd3;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      background-color: #ffffff;
+      color: #1e293b;
+      font-family: inherit;
+    }
+    .controls-box input { flex: 1; max-width: 300px; }
+
+    .controls-box select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23475569" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    button.sort-btn {
+      background: #ffffff;
+      border: 1px solid #b18bd3;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #5e3f7d;
+      transition: background 0.2s;
+    }
+    button.sort-btn:hover { background: #f3e8ff; }
+
+    .board { display: flex; gap: 20px; align-items: flex-start; }
+    .column { flex: 1; padding: 20px; border-radius: 10px; min-height: 500px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
+    .column:nth-child(1) { background-color: #dbeafe; }
+    .column:nth-child(2) { background-color: #fef9c3; }
+    .column:nth-child(3) { background-color: #dcfce7; }
+    .column h3 { margin-top: 0; font-size: 16px; text-transform: uppercase; border-bottom: 2px solid rgba(0, 0, 0, 0.1); padding-bottom: 10px; margin-bottom: 15px; }
+    .column:nth-child(1) h3 { color: #1e40af; }
+    .column:nth-child(2) h3 { color: #854d0e; }
+    .column:nth-child(3) h3 { color: #166534; }
+    .task-card { background: #ffffff; padding: 14px 16px; margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+    .column:nth-child(1) .task-card { border-left: 4px solid #2563eb; }
+    .column:nth-child(2) .task-card { border-left: 4px solid #eab308; }
+    .column:nth-child(3) .task-card { border-left: 4px solid #22c55e; }
+    .task-card h4 { margin: 0 0 6px 0; font-size: 15px; color: #0f172a; }
+    .task-card p { margin: 0 0 10px 0; font-size: 12px; color: #64748b; }
+    .tag-badge { display: inline-block; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 10px; }
+    .task-card button { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; cursor: pointer; font-size: 12px; font-weight: 500; color: #334155; border-radius: 4px; margin-right: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Kanban Board</h2>
+  <span id="total-counter">Total tasks: 0</span>
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar-fill" id="progress-fill"></div>
+</div>
+<div class="progress-text" id="progress-text">Completed: 0%</div>
+
+<div class="controls-box">
+  <input type="text" id="search-input" placeholder="Search tasks...">
+  <select id="tag-filter">
+    <option value="">All Tags</option>
+    <option value="Study">Study</option>
+    <option value="Life">Life</option>
+    <option value="Work">Work</option>
+  </select>
+  <button class="sort-btn" id="sort-btn">Sort by Priority (Asc)</button>
+  <span id="filter-message" style="color: #fca5a5; font-size: 13px;"></span>
+</div>
+
+<div class="board" id="kanban-board">
+  <div class="column">
+    <h3>To Do</h3>
+    <div id="todo-tasks"></div>
+  </div>
+  <div class="column">
+    <h3>In Progress (max 3)</h3>
+    <div id="in-progress-tasks"></div>
+  </div>
+  <div class="column">
+    <h3>Done</h3>
+    <div id="done-tasks"></div>
+  </div>
+</div>
+
+<script src="task2.js" defer></script>
+</body>
+</html>

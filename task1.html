@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 1: Higher or Lower Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #734f96;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+    h2 {
+      margin-top: 0;
+      color: #0f172a;
+      font-size: 24px;
+    }
+    p {
+      font-size: 15px;
+      color: #475569;
+      margin: 15px 0;
+    }
+    strong {
+      color: #734f96;
+      font-size: 20px;
+    }
+    .buttons-container {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      flex: 1;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+      border-radius: 8px;
+      transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    }
+    button:hover:not(:disabled) {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+      transform: translateY(-2px);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #restart-btn {
+      width: 100%;
+      margin-top: 15px;
+      background: #f3e8ff;
+      color: #734f96;
+      border: 1px solid #d8b4fe;
+    }
+    #restart-btn:hover {
+      background: #e9d5ff;
+    }
+    #message {
+      font-weight: 600;
+      min-height: 24px;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-box">
+  <h2>Higher or Lower</h2>
+  <p>Current number: <strong id="current-number">?</strong></p>
+  <p>Lives: <span id="lives">3</span> | Score: <span id="score">0</span> | Best: <span id="best-streak">0</span></p>
+
+  <div class="buttons-container">
+    <button id="higher-btn">Higher ⬆</button>
+    <button id="lower-btn">Lower ⬇</button>
+  </div>
+
+  <button id="restart-btn">Restart Game</button>
+  <p id="message"></p>
+</div>
+
+<script src="task1.js" defer></script>
+</body>
+</html>
